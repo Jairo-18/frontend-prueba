@@ -2,14 +2,11 @@ import { RoleType } from '../../shared/interfaces/relatedDataGeneral';
 
 export interface RegisterUser {
   userId: string;
-  identificationType: string;
   identificationNumber: string;
-  firstName: string;
-  lastName: string;
+  fullName: string;
   email: string;
-  phoneCode: string;
-  phone: string;
   password: string;
+  dateOfBirth: Date;
   confirmPassword: string;
   roleType?: string;
 }

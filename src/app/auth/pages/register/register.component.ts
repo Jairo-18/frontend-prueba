@@ -19,8 +19,8 @@ import * as uuid from 'uuid';
 import { RegisterUser } from '../../interfaces/register.interface';
 import { RegisterService } from '../../services/register.service';
 import { RelatedDataService } from '../../../shared/services/relatedData.service';
-import {} from '../../../shared/interfaces/relatedDataGeneral';
 import { CustomValidationsService } from '../../../shared/services/customValidations.service';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-register',
@@ -35,7 +35,8 @@ import { CustomValidationsService } from '../../../shared/services/customValidat
     CommonModule,
     RouterModule,
     MatStepperModule,
-    MatSelectModule
+    MatSelectModule,
+    MatDatepickerModule
   ],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
@@ -49,43 +50,24 @@ export class RegisterComponent implements OnInit {
   showPassword: boolean = false;
   showConfirmPassword: boolean = false;
 
-  private readonly _registerService: RegisterService = inject(RegisterService);
-  private readonly _router: Router = inject(Router);
-  private readonly _relatedDataService: RelatedDataService =
-    inject(RelatedDataService);
-  private readonly _customValidations: CustomValidationsService = inject(
-    CustomValidationsService
-  );
-  private readonly _passwordValidationService: CustomValidationsService =
-    inject(CustomValidationsService);
+  private readonly _registerService = inject(RegisterService);
+  private readonly _router = inject(Router);
+  private readonly _relatedDataService = inject(RelatedDataService);
+  private readonly _customValidations = inject(CustomValidationsService);
 
-  /**
-   * Se recibe la información diligenciada en el formulario.
-   * @param constructor - Creación del formulario.
-   * @param formStep1 - Formulario 1 de información personal.
-   * @param formStep2 - Formulario 2 de cuenta.
-   * @param passwordStrength - Válida que la contraseña poseea más de 6 carácteres, 1 minúscula, 1 mayúscula y 1 carácter especial.
-   * @param passwordsMatch - Válida que la contraseña sea igual a confirmar contraseña.
-   */
   constructor(private _fb: FormBuilder) {
     this.formStep1 = this._fb.group({
-      identificationTypeId: ['', Validators.required],
       identificationNumber: ['', Validators.required],
-      firstName: ['', Validators.required],
-      lastName: ['', [Validators.required]]
+      fullName: ['', Validators.required]
     });
 
     this.formStep2 = this._fb.group(
       {
         email: ['', [Validators.required, Validators.email]],
-        phoneCodeId: ['', Validators.required],
-        phone: ['', [Validators.required, Validators.pattern(/^[0-9]{1,15}$/)]],
+        dateOfBirth: ['', Validators.required],
         password: [
           '',
-          [
-            Validators.required,
-            this._passwordValidationService.passwordStrength()
-          ]
+          [Validators.required, this._customValidations.passwordStrength()]
         ],
         confirmPassword: ['', [Validators.required]]
       },
@@ -98,12 +80,6 @@ export class RegisterComponent implements OnInit {
     );
   }
 
-  /**
-   * Inicializa el campo confirmar contraseña como disable.
-   * @param ngOnInit - Trae la data.
-   * @param formStep2 - Le decimos al campo confirmPassword que inicie bloqueado.
-   * @param formStep2 - Luego condicionamos para que al llenar password se desbloque confirmPassword.
-   */
   ngOnInit(): void {
     this.formStep2.get('confirmPassword')?.disable();
     this.formStep2.get('password')?.valueChanges.subscribe((value) => {
@@ -115,50 +91,40 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  /**
-   * @param nextStep - Función para seguir al siguiente formulario.
-   */
-  nextStep() {
+  nextStep(): void {
     if (this.formStep1.valid) {
       this.currentStep = 'two';
+    } else {
+      this.formStep1.markAllAsTouched();
     }
   }
 
-  /**
-   * @param save - Envío de información al backend para registrar al usuario.
-   */
-  save() {
+  save(): void {
     if (this.formStep2.valid && this.formStep1.valid) {
-      const userToRegister: RegisterUser = {
+      const userData: RegisterUser = {
         userId: uuid.v4(),
-        identificationType: this.formStep1.value.identificationTypeId,
         identificationNumber: this.formStep1.value.identificationNumber,
-        firstName: this.formStep1.value.firstName,
-        lastName: this.formStep1.value.lastName,
+        fullName: this.formStep1.value.fullName,
         email: this.formStep2.value.email,
-        phoneCode: this.formStep2.value.phoneCodeId,
-        phone: this.formStep2.value.phone,
+        dateOfBirth: this.formStep2.value.dateOfBirth,
         password: this.formStep2.value.password,
-        confirmPassword: this.formStep2.get('confirmPassword')?.value
+        confirmPassword: this.formStep2.value.confirmPassword
       };
-      this._registerService.registerUser(userToRegister).subscribe({
-        next: () => {
-          this._router.navigate(['/auth/login']);
-        }
+
+      this._registerService.registerUser(userData).subscribe({
+        next: () => this._router.navigate(['/auth/login']),
+        error: (error) => console.error('Registration error:', error)
       });
+    } else {
+      this.formStep1.markAllAsTouched();
+      this.formStep2.markAllAsTouched();
     }
   }
 
-  /**
-   * @param togglePasswordVisibility - Ver contraseña.
-   */
   togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
   }
 
-  /**
-   * @param toggleConfirmPasswordVisibility - Ver confirmar contraseña.
-   */
   toggleConfirmPasswordVisibility(): void {
     this.showConfirmPassword = !this.showConfirmPassword;
   }

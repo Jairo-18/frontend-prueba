@@ -2,17 +2,8 @@
 <div class="brand-content-center py-5">
   <!-- Contenedor del formulario de registro -->
   <article
-    class="w-[90%] xl:w-[60%] lg:w-[90%] h-full md:h-full my-10 md:my-0 flex content-between justify-center items-center border border-black rounded-2xl mx-auto"
+    class="w-[90%] xl:w-[35%] lg:w-[45%] h-full md:h-full my-10 md:my-0 flex content-between justify-center items-center border border-black rounded-2xl mx-auto"
   >
-    <!-- Sección izquierda: Imagen decorativa (solo visible en pantallas medianas en adelante) -->
-    <section class="h-full w-full hidden md:flex flex-col">
-      <img
-        src="../../../../assets/images/registernew.jpg"
-        alt="Register Image"
-        class="min-h-[790px] object-cover w-full rounded-l-2xl"
-      />
-    </section>
-
     <!-- Sección derecha: Formulario -->
     <section
       class="h-full w-full flex flex-col text-center py-5 gap-0 md:gap-1"
@@ -37,30 +28,6 @@
           >
             <ng-template matStepLabel>Información Personal</ng-template>
 
-            <!-- Tipo de identificación -->
-            <mat-form-field appearance="outline" class="w-full">
-              <mat-label>Tipo de Identificación</mat-label>
-              <mat-select formControlName="identificationTypeId" required>
-                <mat-option value="" disabled selected
-                  >Seleccione su tipo de identificación</mat-option
-                >
-                <mat-option
-                  *ngFor="let type of identificationType"
-                  [value]="type.identificationTypeId.toString()"
-                >
-                  {{ type.name }}
-                </mat-option>
-              </mat-select>
-              <mat-icon matPrefix>table_chart</mat-icon>
-              <mat-error
-                *ngIf="
-                  formStep1.get('identificationTypeId')?.hasError('required')
-                "
-              >
-                Tipo de identificación requerido
-              </mat-error>
-            </mat-form-field>
-
             <!-- Número de identificación -->
             <mat-form-field appearance="outline" class="w-full">
               <mat-label>Número de identificación</mat-label>
@@ -78,26 +45,16 @@
             <!-- Nombres -->
             <mat-form-field appearance="outline" class="w-full">
               <mat-label>Nombres Completos</mat-label>
-              <input matInput formControlName="firstName" required />
+              <input matInput formControlName="fullName" required />
               <mat-icon matPrefix>person</mat-icon>
               <mat-error
-                *ngIf="formStep1.get('firstName')?.hasError('required')"
+                *ngIf="formStep1.get('fullName')?.hasError('required')"
               >
                 Nombres completos requerido
               </mat-error>
             </mat-form-field>
 
             <!-- Apellidos -->
-            <mat-form-field appearance="outline" class="w-full">
-              <mat-label>Apellidos Completos</mat-label>
-              <input matInput formControlName="lastName" required />
-              <mat-icon matPrefix>people</mat-icon>
-              <mat-error
-                *ngIf="formStep1.get('lastName')?.hasError('required')"
-              >
-                Apellidos completos requerido
-              </mat-error>
-            </mat-form-field>
 
             <!-- Botón siguiente -->
             <div actions class="w-full flex justify-end text-sm md:text-base">
@@ -135,38 +92,25 @@
             </mat-form-field>
 
             <!-- País -->
-            <mat-form-field appearance="outline" class="w-full">
-              <mat-label>País</mat-label>
-              <mat-select formControlName="phoneCodeId" required>
-                <mat-option value="" disabled selected
-                  >Seleccione su país</mat-option
-                >
-                <mat-option
-                  *ngFor="let type of phoneCode"
-                  [value]="type.phoneCodeId.toString()"
-                >
-                  {{ type.code }} {{ type.name }}
-                </mat-option>
-              </mat-select>
-              <mat-icon matPrefix>flag</mat-icon>
-              <mat-error
-                *ngIf="formStep2.get('phoneCodeId')?.hasError('required')"
-              >
-                País requerido
-              </mat-error>
-            </mat-form-field>
 
             <!-- Teléfono -->
             <mat-form-field appearance="outline" class="w-full">
-              <mat-label>Teléfono</mat-label>
-              <input matInput formControlName="phone" />
-              <mat-icon matPrefix>phone_iphone</mat-icon>
-              <mat-error *ngIf="formStep2.get('phone')?.hasError('required')">
-                Teléfono requerido
-              </mat-error>
-              <mat-error *ngIf="formStep2.get('phone')?.hasError('pattern')">
-                Solo números, máximo 15 dígitos
-              </mat-error>
+              <mat-icon matPrefix>calendar_today</mat-icon>
+              <mat-label>Fecha de Nacimiento</mat-label>
+              <input
+                matInput
+                [matDatepicker]="picker"
+                formControlName="dateOfBirth"
+                required
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="picker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+              @if (formStep2.get('dateOfBirth')?.hasError('required')) {
+              <mat-error>Fecha de nacimiento requerida</mat-error>
+              }
             </mat-form-field>
 
             <!-- Contraseña -->
