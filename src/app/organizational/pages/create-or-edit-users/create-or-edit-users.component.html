@@ -1,0 +1,98 @@
+<app-base-page
+  [headerTitle]="isEditMode ? 'Editar usuario' : 'Crear usuario'"
+  [showContentTitle]="true"
+  [contentInfo]="
+    isEditMode
+      ? 'Edita los campos que desees'
+      : 'Aquí puedes crear usuarios con sus respectivos roles'
+  "
+  [showBackButton]="true"
+  backButtonRoute="/organizational/users/list"
+  backButtonText="Volver"
+  backButtonTooltip="Volver a la lista"
+  [showActions]="false"
+  [showContentInfo]="true"
+>
+  @if (!loading) {
+  <form [formGroup]="userForm" class="flex flex-col">
+    <div class="flex flex-col md:flex-row gap-x-10 gap-y-[25px] md:gap-y-0">
+      <section class="flex flex-col w-full md:w-[50%] gap-[25px] md:gap-2">
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Rol</mat-label>
+          <mat-select formControlName="roleTypeId" required>
+            <mat-option value="" disabled selected
+              >Seleccione el rol</mat-option
+            >
+            <mat-option *ngFor="let role of roleType" [value]="role.roleTypeId">
+              {{ role.name }}
+            </mat-option>
+          </mat-select>
+          <mat-icon matPrefix>library_books</mat-icon>
+          <mat-error *ngIf="userForm.get('roleTypeId')?.hasError('required')">
+            Rol requerido
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Número de identificación</mat-label>
+          <mat-icon matPrefix>credit_card</mat-icon>
+          <input matInput formControlName="identificationNumber" required />
+          <mat-error
+            *ngIf="userForm.get('identificationNumber')?.hasError('required')"
+          >
+            Número de identificación requerido
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-icon matPrefix>person</mat-icon>
+          <mat-label>Nombres completos</mat-label>
+          <input matInput formControlName="fullName" required />
+          @if (userForm.get('fullName')?.hasError('required')) {
+          <mat-error>Nombres completos requeridos</mat-error>
+          }
+        </mat-form-field>
+      </section>
+
+      <section class="flex flex-col w-full md:w-[50%] gap-[25px] md:gap-2">
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Correo Electrónico</mat-label>
+          <input matInput formControlName="email" required />
+          <mat-icon matPrefix>email</mat-icon>
+          <mat-error *ngIf="userForm.get('email')?.hasError('required')">
+            Email requerido
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-icon matPrefix>calendar_today</mat-icon>
+          <mat-label>Fecha de Nacimiento</mat-label>
+          <input
+            matInput
+            [matDatepicker]="picker"
+            formControlName="dateOfBirth"
+            required
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          @if (userForm.get('dateOfBirth')?.hasError('required')) {
+          <mat-error>Fecha de nacimiento requerida</mat-error>
+          }
+        </mat-form-field>
+      </section>
+    </div>
+
+    <section
+      class="w-full h-full items-end justify-end flex text-sm md:text-base"
+    >
+      <div class="w-full md:w-[25%]">
+        <button mat-fab extended="true" class="!w-full" (click)="save()">
+          {{ isEditMode ? 'Guardar cambios' : 'Crear usuario' }}
+        </button>
+      </div>
+    </section>
+  </form>
+  } @else {<app-loader></app-loader>}
+</app-base-page>

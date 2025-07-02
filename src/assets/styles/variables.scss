@@ -1,0 +1,145 @@
+// Colores base
+$white-color-base: #ffffff;
+$black-color-base: #000000;
+$black-color-base-10: #ffffff;
+$brand-red-color: #d61a44;
+$brand-red-color-10: #a90429;
+
+// Paleta de colores base
+$light-green-50: #f0f9f1; // Tonalidad muy clara
+$light-green-100: #d3e9d2; // Tonalidad clara
+$light-green-200: #a9d59f; // Tonalidad suave
+$light-green-300: #7cb86d; // Tonalidad intermedia
+$light-green-400: #57a545; // Tonalidad más fuerte
+$light-green-500: #06a606; // Color base (principal)
+$light-green-600: #069905; // Un poco más oscuro
+$light-green-700: #058b04; // Más oscuro
+$light-green-800: #047d03; // Más oscuro
+$light-green-900: #036e02; // Más oscuro
+$light-green-A100: #8cd38c; // Variante en tonos pasteles
+$light-green-A200: #6ab76a; // Variante más fuerte
+$light-green-A400: #3d9f3d; // Variante más saturada
+$light-green-A700: #238a23;
+$deep-green-dark: #10172b;
+
+// Colores semánticos principales
+$brand-light-green-color: #06a606;
+$primary-color: $light-green-500;
+// $secondary-color: $light-green-900;
+$accent-color: $light-green-A400;
+$background-color: $light-green-50;
+$surface-color: $white-color-base;
+$error-color: #b00020;
+$gray-color: #797979;
+
+$heigth-nav-bar: 80px;
+$width-side-bar: 300px;
+
+// Medidas globales
+$brand-height-router-outlet-container: calc(100vh - ($heigth-nav-bar));
+
+// Layout
+$side-bar-background: #06a606;
+$side-bar-background-color: #0dda0d;
+$header-background: #ffffff;
+
+// UI Components
+$brand-mobile-font-size: 14px;
+$brand-web-font-size: 14px;
+$brand-mobile-icon-button-size: 30px;
+$brand-mobile-icon-size: 18px;
+$brand-mobile-height: 40px;
+$brand-tablet-height: 46px;
+$brand-web-height: 53px;
+$brand-mat-menu-item-size: 18px;
+$brand-mat-menu-active-item-size: 14px;
+
+/*Colores para componentes*/
+$brand-error-color: $brand-red-color;
+$brand-light-green-color: #06a606;
+$brand-gray-color: $gray-color;
+$brand-border-radius: 24px;
+$brand-border-radius-sm: 16px;
+$brand-border-radius-manage-users-cards: 6px;
+$brand-green-color: #06a606;
+$brand-radio-checked-color: $brand-green-color;
+$brand-outlined-rounded-inputs-color: $brand-gray-color;
+$brand-outlined-inputs-color: $brand-light-green-color;
+$brand-icons-color: $brand-light-green-color;
+$brand-green-button-color: $brand-green-color;
+$brand-form-field-focus-color: $brand-green-color;
+$brand-success-input-color: #06a606;
+$brand-global-height-button: $brand-tablet-height;
+
+// Para tamaños de pantalla
+$max-width-layout: 1440px;
+$max-width-tablet: 899.98px;
+$max-width-phone: 575.98px;
+$min-width-desktop: 576px;
+
+// Colores funcionales adicionales
+$success-color: #4caf50;
+$warning-color: #d82323;
+$info-color: #2196f3;
+
+// Bordes
+$border-radius: 4px;
+$border-width: 1px;
+$border-color: $light-green-400;
+$global-border: $border-width solid $border-color;
+
+// Variaciones de los colores principales
+$primary-light: $light-green-300;
+$primary-dark: $light-green-700;
+
+// Colores de hover para botones
+$button-hover-color: $primary-light;
+$outlined-button-hover-color: $light-green-100;
+$fab-hover-color: $primary-light;
+$warning-hover-color: #e43e3e;
+
+// Sombras
+$box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+// Tipografía
+$font-size-small: 12px;
+$font-size-medium: 14px;
+$font-size-large: 16px;
+$font-weight-normal: 400;
+$font-weight-bold: 700;
+
+// Espaciado
+$spacing-small: 8px;
+$spacing-medium: 16px;
+$spacing-large: 24px;
+
+// Colores de texto
+$text-primary: $light-green-900;
+$text-secondary: $light-green-600;
+$text-disabled: $light-green-100;
+$text-on-primary: $white-color-base;
+$text-on-secondary: $white-color-base;
+
+// Transiciones
+$transition-fast: 0.3s ease;
+$transition-slow: 0.5s ease;
+
+// Hover
+$primary-hover-color: $light-green-300;
+$secondary-hover-color: $light-green-800;
+
+/* toast variables */
+$toast-success-border: #64da4c;
+$toast-warning-border: #ffeeba;
+$toast-error-border: #e42b2b;
+$toast-info-border: #b8daff;
+
+$toast-success-color: #2b753c;
+$toast-warning-color: #856404;
+$toast-error-color: #7a1b25;
+$toast-info-color: #004085;
+
+$toast-success-icon: '\f058';
+$toast-warning-icon: '\f071';
+$toast-error-icon: '\f06a';
+$toast-info-icon: '\f05a';

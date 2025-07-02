@@ -1,0 +1,49 @@
+@import 'variables';
+
+@mixin media-phone {
+  @media (max-width: $max-width-phone) {
+    @content;
+  }
+}
+
+@mixin media-tablet {
+  @media (max-width: $max-width-tablet) {
+    @content;
+  }
+}
+
+@mixin media-desktop {
+  @media (min-width: $min-width-desktop) {
+    @content;
+  }
+}
+
+@mixin padding-responsive {
+  padding: 30px;
+  @include media-phone {
+    padding: 16px;
+  }
+}
+
+@mixin padding-y-responsive {
+  padding-top: 50px;
+  padding-bottom: 80px;
+  @include media-phone {
+    padding-top: 24px;
+    padding-bottom: 24px;
+  }
+}
+
+@mixin display-desktop {
+  display: block;
+  @include media-phone {
+    display: none;
+  }
+}
+
+@mixin display-phone {
+  display: none;
+  @include media-phone {
+    display: block;
+  }
+}

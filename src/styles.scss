@@ -1,1 +1,21 @@
-/* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+@use 'assets/styles/variables' as *;
+@use 'assets/styles/breakpoints.scss';
+@use 'assets/styles/global.scss';
+@use 'assets/styles/mat-theming.scss';
+@use 'assets/styles/mat-config-theme.scss';
+@use 'assets/styles/animations.scss';
+@import 'ngx-toastr/toastr';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}

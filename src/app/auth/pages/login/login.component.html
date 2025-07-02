@@ -1,0 +1,98 @@
+<!-- Contenedor centrado del login -->
+<div class="brand-content-center py-5">
+  <!-- Card de login con bordes y centrado general -->
+  <article
+    class="h-full w-[90%] xl:w-[35%] lg:w-[45%] flex content-between justify-center items-center border border-black rounded-2xl mx-auto"
+  >
+    <!-- Sección izquierda (formulario de login) -->
+    <section
+      class="h-full w-full flex flex-col text-center justify-center items-center px-5 py-10 gap-4"
+    >
+      <!-- Título y subtítulo -->
+      <div class="flex flex-col gap-1.5">
+        <span class="font-extrabold text-lg md:text-xl">Iniciar Sesión</span>
+        <span class="font-medium text-sm">
+          Ingresa tus datos para Iniciar Sesión
+        </span>
+      </div>
+
+      <!-- Formulario reactivo de Angular -->
+      <form
+        [formGroup]="form"
+        class="flex flex-col w-full items-center gap-1.5"
+      >
+        <!-- Campo de correo electrónico -->
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Correo electrónico</mat-label>
+          <input matInput formControlName="email" />
+          <mat-icon matPrefix>email</mat-icon>
+
+          <!-- Validaciones del campo email -->
+          <mat-error *ngIf="form.get('email')?.hasError('required')">
+            Correo electrónico requerido
+          </mat-error>
+          <mat-error *ngIf="form.get('email')?.hasError('email')">
+            Correo electrónico inválido
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Campo de contraseña -->
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Contraseña</mat-label>
+          <input
+            [type]="!showPassword ? 'password' : 'text'"
+            matInput
+            formControlName="password"
+          />
+          <mat-icon matPrefix>lock</mat-icon>
+
+          <!-- Toggle para mostrar u ocultar la contraseña -->
+          <button
+            matSuffix
+            mat-icon-button
+            (click)="showPassword = !showPassword"
+            class="mr-1"
+          >
+            <fa-icon [icon]="!showPassword ? eyeOpen : eyeClose"></fa-icon>
+          </button>
+
+          <!-- Validación de campo requerido -->
+          <mat-error *ngIf="form.get('password')?.hasError('required')">
+            Contraseña requerida
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Botón para enviar el formulario -->
+        <div
+          class="flex w-full content-between items-center justify-center gap-5"
+        >
+          <button mat-fab extended="true" (click)="login()" class="!w-full">
+            <span class="text-sm md:text-base">Iniciar Sesión</span>
+          </button>
+        </div>
+
+        <!-- Links adicionales para recuperación y registro -->
+        <div class="w-full md:w-[70%]">
+          <!-- Recuperar contraseña -->
+          <a
+            routerLink="/auth/recovery-password"
+            class="cursor-pointer text-green-700 hover:text-green-400 hover-underline-animation text-sm md:text-base"
+          >
+            ¿Olvidaste tu contraseña?
+          </a>
+
+          <!-- Registrarse si no tiene cuenta -->
+          <span class="text-sm md:text-base">
+            ¿No tienes una cuenta?
+            <a
+              routerLink="/auth/register"
+              class="cursor-pointer text-green-700 hover:text-green-400 hover-underline-animation text-sm md:text-base"
+            >
+              Registrarse
+            </a>
+          </span>
+        </div>
+      </form>
+    </section>
+  </article>
+</div>

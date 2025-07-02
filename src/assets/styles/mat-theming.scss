@@ -1,0 +1,344 @@
+@use 'sass:color';
+@import 'variables';
+@import 'breakpoints';
+
+button {
+  letter-spacing: normal !important;
+  font-size: $brand-web-font-size !important;
+}
+
+input,
+textarea {
+  caret-color: inherit !important;
+}
+
+/*
+Personalización de los componentes materiales
+*/
+.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field
+  .mdc-notched-outline__notch {
+  border-inline: none !important;
+}
+/* Change material no rounded input border color */
+.mdc-text-field--outlined:not(.mdc-text-field--disabled):not(
+    .mdc-text-field--invalid
+  )
+  .mdc-notched-outline__leading,
+.mdc-text-field--outlined:not(.mdc-text-field--disabled):not(
+    .mdc-text-field--invalid
+  )
+  .mdc-notched-outline__notch,
+.mdc-text-field--outlined:not(.mdc-text-field--disabled):not(
+    .mdc-text-field--invalid
+  )
+  .mdc-notched-outline__trailing {
+  border-color: $brand-outlined-inputs-color !important; // Ajustado al color de entrada
+}
+
+/* Default mat text field icon color */
+.mat-mdc-form-field {
+  &.ng-untouched {
+    mat-icon {
+      color: $brand-icons-color !important; // Color de ícono ajustado
+    }
+  }
+
+  &.mat-focused {
+    --mdc-outlined-text-field-focus-outline-width: 1px;
+  }
+}
+
+/* Invalid mat text field colors */
+.mdc-text-field {
+  &.mdc-text-field--invalid {
+    mat-icon {
+      color: $error-color !important; // Color de error ajustado
+    }
+
+    .mat-mdc-input-element::placeholder {
+      color: $error-color !important; // Color de placeholder de error
+    }
+  }
+}
+
+/* Change outlined button border color */
+.mat-mdc-outlined-button:not(:disabled) {
+  border-color: $primary-color !important; // Color del borde del botón ajustado
+}
+
+/* Add rounded to material form field */
+mat-form-field {
+  &.brand-mat-form-field-rounded {
+    .mdc-text-field--outlined {
+      --mdc-outlined-text-field-container-shape: #{$brand-border-radius};
+    }
+
+    /* Add material rounded inputs border color */
+    .mdc-text-field--outlined:not(.mdc-text-field--disabled):not(
+        .mdc-text-field--invalid
+      )
+      .mdc-notched-outline__leading,
+    .mdc-text-field--outlined:not(.mdc-text-field--disabled):not(
+        .mdc-text-field--invalid
+      )
+      .mdc-notched-outline__notch,
+    .mdc-text-field--outlined:not(.mdc-text-field--disabled):not(
+        .mdc-text-field--invalid
+      )
+      .mdc-notched-outline__trailing {
+      border-color: $brand-outlined-rounded-inputs-color !important; // Color de borde de entrada redondeada
+    }
+  }
+}
+
+@include media-phone {
+  mat-form-field {
+    &.brand-mat-form-field-rounded-phone {
+      .mdc-text-field--outlined {
+        --mdc-outlined-text-field-container-shape: #{$brand-border-radius} !important;
+      }
+
+      /* Add material rounded inputs border color */
+      .mdc-text-field--outlined:not(.mdc-text-field--disabled):not(
+          .mdc-text-field--invalid
+        )
+        .mdc-notched-outline__leading,
+      .mdc-text-field--outlined:not(.mdc-text-field--disabled):not(
+          .mdc-text-field--invalid
+        )
+        .mdc-notched-outline__notch,
+      .mdc-text-field--outlined:not(.mdc-text-field--disabled):not(
+          .mdc-text-field--invalid
+        )
+        .mdc-notched-outline__trailing {
+        border-color: $brand-outlined-rounded-inputs-color !important; // Color de borde de entrada redondeada en móvil
+      }
+    }
+  }
+
+  .mdc-fab--extended {
+    font-weight: 500 !important;
+    font-size: $brand-mobile-font-size !important;
+    height: $brand-mobile-height !important;
+  }
+}
+
+.mat-mdc-form-field {
+  &.brand-success-mat-form-field {
+    --mdc-outlined-text-field-focus-outline-width: 1px;
+
+    .mdc-text-field--outlined:not(.mdc-text-field--disabled):not(
+        .mdc-text-field--invalid
+      ) {
+      .mdc-notched-outline__trailing {
+        border-color: $brand-success-input-color !important;
+      }
+
+      .mdc-notched-outline__leading {
+        border-color: $brand-success-input-color !important;
+      }
+    }
+  }
+}
+
+/* Remove buttons shadow */
+.mat-mdc-fab {
+  box-shadow: none !important;
+  background-color: $light-green-600 !important;
+  /* green brand button */
+  &.brand-mat-fab-blue {
+    background-color: $primary-color !important; // Color del botón azul
+  }
+
+  &.mat-warn {
+    background-color: $warning-color !important;
+  }
+}
+
+/* Change outlined button appearance */
+.mat-mdc-outlined-button {
+  font-weight: 600 !important;
+  border-radius: $brand-border-radius !important;
+  height: $brand-global-height-button !important;
+  border: $global-border !important;
+
+  &.brand-ghost-button {
+    border: none !important;
+  }
+
+  @include media-phone {
+    font-size: $brand-mobile-font-size !important;
+    height: $brand-mobile-height !important;
+  }
+}
+
+.mdc-fab--extended {
+  &.brand-button-small {
+    height: $brand-mobile-icon-button-size;
+    font-size: 0.75rem !important;
+  }
+}
+
+/* Change radios color */
+.mat-mdc-radio-button
+  .mdc-radio
+  .mdc-radio__native-control:enabled:not(:checked)
+  + .mdc-radio__background
+  .mdc-radio__outer-circle {
+  border-color: $brand-outlined-inputs-color !important; // Color de borde de radio ajustado
+}
+
+/* Botones tipo icon con outlined */
+.mat-mdc-icon-button {
+  &.brand-icon-button-outlined {
+    border: 1px solid $primary-color; // Color de borde del botón de icono ajustado
+  }
+}
+
+/* Checkbox */
+.mdc-form-field .mdc-checkbox .mdc-checkbox__background {
+  border-radius: 4px;
+}
+
+/* Stepper */
+.brand-linear-stepper {
+  .mat-horizontal-content-container {
+    padding: 0 !important;
+    justify-content: space-between !important;
+  }
+
+  .mat-step-header .mat-step-icon {
+    display: none !important;
+  }
+
+  .mat-stepper-horizontal-line {
+    display: none;
+  }
+
+  .mat-horizontal-stepper-header {
+    padding: 0 5px !important;
+    flex-grow: 1 !important;
+  }
+
+  .mat-horizontal-stepper-header-container {
+    flex-wrap: wrap !important;
+  }
+
+  .mat-step-label {
+    width: 100% !important;
+    height: 80% !important;
+  }
+}
+
+.mdc-button:hover {
+  background-color: $primary-light !important;
+  color: $white-color-base !important;
+  font-weight: 500 !important;
+
+  &.mat-mdc-outlined-button:not(:disabled) {
+    border-color: transparent !important;
+  }
+
+  &.mat-mdc-raised-button.mat-primary {
+    background-color: $light-green-900 !important;
+    color: $white-color-base !important;
+  }
+}
+
+.mat-mdc-extended-fab[disabled] {
+  opacity: 0.6 !important;
+}
+
+.mdc-fab:hover {
+  background-color: $light-green-900 !important;
+  color: $white-color-base !important;
+
+  &.mat-warn {
+    background-color: $warning-hover-color !important;
+  }
+}
+
+.mat-mdc-fab[disabled] {
+  --brand-primary-color-rgba: #{color.adjust($primary-color, $alpha: -0.6)};
+  --mat-fab-disabled-state-container-color: var(--brand-primary-color-rgba);
+  color: $black-color-base-10 !important;
+}
+
+.mat-mdc-outlined-button[disabled] {
+  --brand-primary-color-rgba: #{color.adjust($primary-color, $alpha: -0.6)};
+  border-color: var(--brand-primary-color-rgba) !important;
+  color: var(--brand-primary-color-rgba) !important;
+}
+
+/*mat-menu*/
+.mat-mdc-menu-panel {
+  background-color: $surface-color !important;
+  border-radius: $brand-border-radius-sm !important;
+  box-shadow: $box-shadow !important;
+}
+
+.mat-mdc-menu-item {
+  font-size: $font-size-medium !important;
+  padding: $spacing-medium !important;
+  color: $text-primary !important;
+  transition: background-color $transition-fast !important;
+  border-bottom: $global-border !important;
+
+  &:hover {
+    background-color: $primary-hover-color !important;
+    color: $text-on-primary !important;
+  }
+
+  &:disabled {
+    color: $text-disabled !important;
+  }
+
+  .mat-mdc-menu-item-icon {
+    font-size: $brand-mat-menu-item-size !important;
+    margin-right: $spacing-small !important;
+  }
+
+  &:last-child {
+    border-bottom: none !important;
+  }
+
+  &.active {
+    .mat-mdc-menu-item-text {
+      font-size: $brand-mat-menu-active-item-size !important;
+      font-weight: 600 !important;
+    }
+  }
+}
+
+.mat-mdc-row {
+  &:hover {
+    background-color: rgb(248, 248, 248) !important;
+  }
+}
+
+/* Estilos personalizados para mat-button-toggle-group */
+.mat-button-toggle-group,
+.period-toggle-group,
+.mat-button-toggle-group-appearance-standard {
+  border: none !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+
+  .mat-button-toggle {
+    font-weight: 600;
+    font-size: $brand-web-font-size;
+    margin: 0 4px;
+    border-radius: $brand-border-radius;
+
+    &.mat-button-toggle-checked {
+      background-color: $primary-color !important;
+      color: $white-color-base !important;
+      box-shadow: $box-shadow;
+    }
+
+    &:not(.mat-button-toggle-checked):hover {
+      background-color: $primary-hover-color !important;
+    }
+  }
+}

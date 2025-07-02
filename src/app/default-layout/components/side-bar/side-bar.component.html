@@ -1,0 +1,243 @@
+<!-- Contenedor principal del sidebar -->
+<aside
+  [ngClass]="{
+    'flex flex-col bg-[#06a606] items-center transition-all duration-300 ease-in-out font-bold border-r border-black': true,
+    'w-16 !h-full': isCollapsed,
+    'w-64 md:w-72 h-full p-2': !isCollapsed,
+    'fixed md:static z-50': !isCollapsed
+  }"
+>
+  <!-- Loader mientras se cargan los datos del usuario -->
+  @if (isLoading) {
+  <div
+    [ngClass]="{
+      'w-full h-full flex items-center justify-center': true,
+      'p-2': !isCollapsed
+    }"
+  >
+    <app-loader class="max-w-12"></app-loader>
+  </div>
+  } @else {
+
+  <!-- Botón para expandir o colapsar el sidebar -->
+  <div
+    class="flex h-[6%] transition-all duration-300 ease-in-out"
+    [ngClass]="{
+      'mt-2 md:mt-4 justify-center': isCollapsed,
+      'justify-start': !isCollapsed
+    }"
+  >
+    <button
+      (click)="toggleSidebar()"
+      mat-icon-button
+      class="w-[40px] h-[40px] flex text-xl bg-white rounded-full shadow-md transition-all duration-300 ease-in-out"
+    >
+      <mat-icon *ngIf="isCollapsed">keyboard_arrow_right</mat-icon>
+      <mat-icon *ngIf="!isCollapsed">close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Logo del hotel (solo visible si no está colapsado) -->
+  <div
+    class="transition-all duration-300 ease-in-out overflow-hidden h-[30%] md:h-[35%]"
+    [ngClass]="{
+      'scale-0 opacity-0 h-[150px] hidden': isCollapsed,
+      'scale-100 opacity-100 mt-5 md:mt-3 flex w-full justify-center items-center':
+        !isCollapsed
+    }"
+  >
+    <img
+      src="../../../../assets/images/Logo Samawe.png"
+      alt="Logo Samawé"
+      class="transition-all duration-300 ease-in-out"
+      [ngClass]="{
+        'h-[90px] md:h-[120px] w-[90px] md:w-[120px] rounded-full border border-black':
+          !isCollapsed
+      }"
+    />
+  </div>
+
+  <!-- Navegación principal -->
+  <nav class="w-full h-full px-2 overflow-y-auto mt-0 md:mt-3">
+    <div class="mt-[10px] md:mt-0">
+      <ul class="flex flex-col transition-all duration-300 ease-in-out">
+        <!-- Itera los módulos del menú (ej. Gestión, Reportes, etc.) -->
+        <ng-container *ngFor="let module of menuWithItems">
+          <!-- Título de módulo -->
+          <div
+            [ngClass]="{
+              'flex justify-start py-[6px]': !isCollapsed,
+              'flex justify-center py-[5px] mb-2': isCollapsed
+            }"
+          >
+            <button
+              class="flex items-center"
+              [ngClass]="{ 'text-black': isCollapsed }"
+            >
+              <div class="flex items-center">
+                <mat-icon
+                  class="text-lg md:text-2xl"
+                  [ngClass]="{
+                    'mx-[5px]': !isCollapsed,
+                    'text-black': isCollapsed,
+                    inline: true
+                  }"
+                >
+                  {{ module.icon }}
+                </mat-icon>
+              </div>
+              <!-- Nombre del módulo -->
+              <div class="flex items-center">
+                <span *ngIf="!isCollapsed" class="text-xs md:text-base">{{
+                  module.module
+                }}</span>
+              </div>
+            </button>
+          </div>
+
+          <!-- Itera los ítems del módulo (menú principal) -->
+          <ng-container *ngFor="let item of module.items">
+            <li>
+              <div
+                [ngClass]="{
+                  'flex justify-start py-[1.5px]': !isCollapsed,
+                  'flex justify-center py-[5px]': isCollapsed
+                }"
+              >
+                <!-- Botón principal del ítem de menú -->
+                <button
+                  [matTooltip]="item.name"
+                  class="transition-all duration-300 ease-in-out flex items-center"
+                  [ngClass]="{
+                    'bg-none': isCollapsed,
+                    'flex w-full rounded-lg bg-white border border-black py-[2px] md:py-[5px]':
+                      !isCollapsed,
+                    'hover:bg-yellow-400': !isCollapsed,
+                    'bg-yellow-400':
+                      getActiveElement(item.route) && !isCollapsed
+                  }"
+                  [routerLink]="
+                    !item?.subItems?.length && item.route ? item?.route : null
+                  "
+                  (click)="!isCollapsed ? toggleSubMenu(item) : null"
+                  [matMenuTriggerFor]="
+                    isCollapsed && item?.subItems?.length ? submenu : null
+                  "
+                  #menuTrigger="matMenuTrigger"
+                >
+                  <div class="flex items-center md:items-start">
+                    <mat-icon
+                      class="flex text-lg md:text-2xl"
+                      [ngClass]="{
+                        'mx-[5px] text-[#06a606]': !isCollapsed,
+                        'text-white': isCollapsed,
+                        inline: true
+                      }"
+                    >
+                      {{ item.icon }}
+                    </mat-icon>
+                  </div>
+                  <div class="flex items-center">
+                    <span *ngIf="!isCollapsed" class="text-xs md:text-base">{{
+                      item.name
+                    }}</span>
+                  </div>
+                </button>
+              </div>
+
+              <!-- Submenú colapsado (modo móvil) -->
+              <mat-menu #submenu="matMenu" xPosition="after">
+                <ng-container *ngFor="let subItem of item.subItems">
+                  <button mat-menu-item [routerLink]="subItem.route">
+                    <mat-icon class="text-[#06a606]">{{
+                      subItem.icon
+                    }}</mat-icon>
+                    <span>{{ subItem.name }}</span>
+                  </button>
+                </ng-container>
+              </mat-menu>
+
+              <!-- Submenú expandido (modo escritorio) -->
+              <div
+                *ngIf="item.subItems?.length"
+                [@submenuState]="openSubMenu[item.name] ? 'open' : 'closed'"
+                class="overflow-hidden transition-all duration-300 ease-in-out"
+                [ngClass]="{
+                  'max-h-0 opacity-0': !openSubMenu[item.name],
+                  'max-h-[500px] opacity-100': openSubMenu[item.name]
+                }"
+              >
+                <ul class="pl-5">
+                  <li *ngFor="let subItem of item.subItems" class="my-1">
+                    <button
+                      class="flex w-full items-center gap-x-2 text-black bg-white rounded-lg border border-black px-3 py-[5px]"
+                    >
+                      <mat-icon class="text-[#06a606]">{{
+                        subItem.icon
+                      }}</mat-icon>
+                      <span [routerLink]="subItem.route">{{
+                        subItem.name
+                      }}</span>
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </li>
+          </ng-container>
+        </ng-container>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Información del usuario logueado (rol y nombre) -->
+  <div
+    class="flex flex-col w-full text-start text-white font-medium text-sm md:text-lg px-2"
+    [ngClass]="{
+      flex: !isCollapsed,
+      hidden: isCollapsed
+    }"
+  >
+    <span>Rol: {{ userComplete?.roleType?.name }}</span>
+    <span>{{ userComplete?.firstName }} {{ userComplete?.lastName }}</span>
+  </div>
+
+  <!-- Botón para cerrar sesión -->
+  <div
+    class="flex flex-col justify-end h-[10%] w-full items-center gap-y-2 px-2 mt-0 md:mt-3"
+  >
+    <button
+      (click)="logout.emit()"
+      [ngClass]="{
+        'flex items-center w-full px-[10px] py-[2px] md:py-[5px] border border-black rounded-lg font-extrabold bg-white hover:bg-blue-400 gap-x-2':
+          !isCollapsed,
+        hidden: isCollapsed
+      }"
+    >
+      <mat-icon
+        class="text-lg md:text-2xl"
+        [ngClass]="{
+          'text-[#06a606]': !isCollapsed,
+          'text-black': isCollapsed,
+          inline: true
+        }"
+      >
+        exit_to_app
+      </mat-icon>
+      <span *ngIf="!isCollapsed" class="text-xs md:text-base"
+        >Cerrar Sesión</span
+      >
+    </button>
+
+    <!-- Footer con copyright -->
+    <span
+      class="text-white text-xs"
+      [ngClass]="{
+        flex: !isCollapsed,
+        hidden: isCollapsed
+      }"
+    >
+      © {{ currentYear }} Ecohotel Samawé.
+    </span>
+  </div>
+  }
+</aside>

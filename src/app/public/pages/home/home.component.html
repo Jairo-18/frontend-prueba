@@ -1,0 +1,30 @@
+@if (isLoggedUser) {
+<article class="brand-content-center">
+  <div class="flex flex-col gap-y-5 md:gap--y-10 justify-center items-center">
+    <span class="text-base md:text-xl font-semibold"
+      >¡Ahora mismo estás logeado en la prueba técnica!</span
+    >
+    <div class="w-[200px] md:w-[300px] flex justify-center gap-x-4">
+      <button mat-fab extended="true" color="warn" (click)="logout()">
+        <span class="text-md font-extrabold">Cerrar Sesión</span>
+      </button>
+      <button mat-fab extended="true" routerLink="/organizational/users/list">
+        <span class="text-md font-extrabold">Ver Usuarios</span>
+      </button>
+    </div>
+  </div>
+</article>
+} @else {
+<article class="brand-content-center">
+  <div class="flex flex-col gap-y-5 md:gap--y-10 justify-center items-center">
+    <span class="text-base md:text-xl font-semibold"
+      >¡Bienvenido a la Prueba Técnica para auxiliar desarrollador!</span
+    >
+    <div class="w-[200px] md:w-[300px] flex justify-center">
+      <button mat-fab extended="true" routerLink="/auth/login">
+        <span class="text-md font-extrabold">Iniciar Sesión</span>
+      </button>
+    </div>
+  </div>
+</article>
+}

@@ -1,0 +1,70 @@
+<article class="brand-content-center">
+  <article
+    class="w-[95%] xl:w-[95%] lg:w-[90%] h-max md:h-full py-7 md:py-7 px-5 md:px-7 rounded-2xl my-10"
+    [ngClass]="{
+      'border border-[#06a606]': showBorder
+    }"
+  >
+    <!-- Back Button Section -->
+    @if (showBackButton) {
+    <div class="mb-4">
+      <button
+        mat-stroked-button
+        [routerLink]="backButtonRoute"
+        [matTooltip]="backButtonTooltip"
+        color="primary"
+        class="border-none"
+      >
+        <mat-icon class="flex justify-center items-center">arrow_back</mat-icon>
+        {{ backButtonText }}
+      </button>
+    </div>
+    }
+
+    <!-- Header Section -->
+    @if (showHeader) {
+    <section class="w-full flex">
+      <span class="text-xl md:text-3xl">{{ headerTitle }}</span>
+    </section>
+    }
+
+    <!-- Info Section -->
+    @if (showInfo && infoText) {
+    <div class="mb-4">
+      <span class="text-sm md:text-base text-black-50 fw-semibold">
+        {{ infoText }}
+      </span>
+    </div>
+    }
+
+    <!-- Actions Section -->
+    @if (showActions) {
+    <section
+      class="w-full h-full items-end justify-end flex text-sm md:text-base"
+    >
+      <ng-content select="[slot=actions]"></ng-content>
+    </section>
+    }
+
+    <!-- Content Title Section -->
+    @if (showContentTitle) {
+    <section
+      class="w-full flex row pb-2 mb-3 md:mb-5 justify-content-between mx-0 mt-4 border-b-[2px] border-b-[#06a606]"
+    >
+      <span class="text-2xl md:text-3xl">{{ contentTitle }}</span>
+    </section>
+    }
+
+    <!-- Content Info Section -->
+    @if (showContentInfo && contentInfo) {
+    <div class="mb-4">
+      <span class="brand-text-body-m text-black-50 fw-semibold">
+        {{ contentInfo }}
+      </span>
+    </div>
+    }
+
+    <!-- Main Content -->
+    <ng-content></ng-content>
+  </article>
+</article>

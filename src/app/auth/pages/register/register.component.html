@@ -1,0 +1,277 @@
+<!-- Contenedor principal centrado verticalmente con padding -->
+<div class="brand-content-center py-5">
+  <!-- Contenedor del formulario de registro -->
+  <article
+    class="w-[90%] xl:w-[60%] lg:w-[90%] h-full md:h-full my-10 md:my-0 flex content-between justify-center items-center border border-black rounded-2xl mx-auto"
+  >
+    <!-- Sección izquierda: Imagen decorativa (solo visible en pantallas medianas en adelante) -->
+    <section class="h-full w-full hidden md:flex flex-col">
+      <img
+        src="../../../../assets/images/registernew.jpg"
+        alt="Register Image"
+        class="min-h-[790px] object-cover w-full rounded-l-2xl"
+      />
+    </section>
+
+    <!-- Sección derecha: Formulario -->
+    <section
+      class="h-full w-full flex flex-col text-center py-5 gap-0 md:gap-1"
+    >
+      <!-- Encabezado -->
+      <div class="flex flex-col gap-1.5">
+        <span class="font-extrabold text-lg md:text-xl">Registrarse</span>
+        <span class="font-medium text-sm">Crea una nueva cuenta</span>
+      </div>
+
+      <!-- Formulario con paso a paso usando mat-stepper -->
+      <mat-horizontal-stepper
+        [linear]="false"
+        #stepper
+        class="w-full h-full bg-white"
+      >
+        <!-- Paso 1: Información personal -->
+        <mat-step [stepControl]="formStep1">
+          <form
+            [formGroup]="formStep1"
+            class="flex flex-col gap-[25px] md:gap-2 mt-5"
+          >
+            <ng-template matStepLabel>Información Personal</ng-template>
+
+            <!-- Tipo de identificación -->
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Tipo de Identificación</mat-label>
+              <mat-select formControlName="identificationTypeId" required>
+                <mat-option value="" disabled selected
+                  >Seleccione su tipo de identificación</mat-option
+                >
+                <mat-option
+                  *ngFor="let type of identificationType"
+                  [value]="type.identificationTypeId.toString()"
+                >
+                  {{ type.name }}
+                </mat-option>
+              </mat-select>
+              <mat-icon matPrefix>table_chart</mat-icon>
+              <mat-error
+                *ngIf="
+                  formStep1.get('identificationTypeId')?.hasError('required')
+                "
+              >
+                Tipo de identificación requerido
+              </mat-error>
+            </mat-form-field>
+
+            <!-- Número de identificación -->
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Número de identificación</mat-label>
+              <input matInput formControlName="identificationNumber" required />
+              <mat-icon matPrefix>credit_card</mat-icon>
+              <mat-error
+                *ngIf="
+                  formStep1.get('identificationNumber')?.hasError('required')
+                "
+              >
+                Número de identificación requerido
+              </mat-error>
+            </mat-form-field>
+
+            <!-- Nombres -->
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Nombres Completos</mat-label>
+              <input matInput formControlName="firstName" required />
+              <mat-icon matPrefix>person</mat-icon>
+              <mat-error
+                *ngIf="formStep1.get('firstName')?.hasError('required')"
+              >
+                Nombres completos requerido
+              </mat-error>
+            </mat-form-field>
+
+            <!-- Apellidos -->
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Apellidos Completos</mat-label>
+              <input matInput formControlName="lastName" required />
+              <mat-icon matPrefix>people</mat-icon>
+              <mat-error
+                *ngIf="formStep1.get('lastName')?.hasError('required')"
+              >
+                Apellidos completos requerido
+              </mat-error>
+            </mat-form-field>
+
+            <!-- Botón siguiente -->
+            <div actions class="w-full flex justify-end text-sm md:text-base">
+              <button
+                mat-fab
+                extended="true"
+                class="flex !w-full"
+                matStepperNext
+              >
+                Siguiente
+              </button>
+            </div>
+          </form>
+        </mat-step>
+
+        <!-- Paso 2: Datos de la cuenta -->
+        <mat-step [stepControl]="formStep2">
+          <form
+            [formGroup]="formStep2"
+            class="flex flex-col gap-[25px] md:gap-2 mt-5"
+          >
+            <ng-template matStepLabel>Tu cuenta</ng-template>
+
+            <!-- Correo electrónico -->
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Correo Electrónico</mat-label>
+              <input matInput formControlName="email" required />
+              <mat-icon matPrefix>email</mat-icon>
+              <mat-error *ngIf="formStep2.get('email')?.hasError('required')">
+                Correo electrónico requerido
+              </mat-error>
+              <mat-error *ngIf="formStep2.get('email')?.hasError('email')">
+                Correo electrónico inválido
+              </mat-error>
+            </mat-form-field>
+
+            <!-- País -->
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>País</mat-label>
+              <mat-select formControlName="phoneCodeId" required>
+                <mat-option value="" disabled selected
+                  >Seleccione su país</mat-option
+                >
+                <mat-option
+                  *ngFor="let type of phoneCode"
+                  [value]="type.phoneCodeId.toString()"
+                >
+                  {{ type.code }} {{ type.name }}
+                </mat-option>
+              </mat-select>
+              <mat-icon matPrefix>flag</mat-icon>
+              <mat-error
+                *ngIf="formStep2.get('phoneCodeId')?.hasError('required')"
+              >
+                País requerido
+              </mat-error>
+            </mat-form-field>
+
+            <!-- Teléfono -->
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Teléfono</mat-label>
+              <input matInput formControlName="phone" />
+              <mat-icon matPrefix>phone_iphone</mat-icon>
+              <mat-error *ngIf="formStep2.get('phone')?.hasError('required')">
+                Teléfono requerido
+              </mat-error>
+              <mat-error *ngIf="formStep2.get('phone')?.hasError('pattern')">
+                Solo números, máximo 15 dígitos
+              </mat-error>
+            </mat-form-field>
+
+            <!-- Contraseña -->
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Contraseña</mat-label>
+              <input
+                [type]="showPassword ? 'text' : 'password'"
+                matInput
+                formControlName="password"
+                required
+              />
+              <mat-icon matPrefix>lock</mat-icon>
+              <button
+                matSuffix
+                mat-icon-button
+                (click)="showPassword = !showPassword"
+              >
+                <mat-icon>{{
+                  showPassword ? 'visibility' : 'visibility_off'
+                }}</mat-icon>
+              </button>
+              <mat-error
+                *ngIf="formStep2.get('password')?.hasError('required')"
+              >
+                Contraseña requerida
+              </mat-error>
+              <mat-error
+                *ngIf="formStep2.get('password')?.hasError('passwordStrength')"
+              >
+                La contraseña debe tener 6 caracteres, con mayúscula, minúscula
+                y un carácter especial.
+              </mat-error>
+            </mat-form-field>
+
+            <!-- Confirmar contraseña -->
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Confirmar Contraseña</mat-label>
+              <input
+                [type]="showConfirmPassword ? 'text' : 'password'"
+                matInput
+                formControlName="confirmPassword"
+                required
+              />
+              <mat-icon matPrefix>lock</mat-icon>
+              <button
+                matSuffix
+                mat-icon-button
+                (click)="showConfirmPassword = !showConfirmPassword"
+              >
+                <mat-icon>{{
+                  showConfirmPassword ? 'visibility' : 'visibility_off'
+                }}</mat-icon>
+              </button>
+              <mat-error
+                *ngIf="formStep2.get('confirmPassword')?.hasError('required')"
+              >
+                Contraseña requerida
+              </mat-error>
+              <mat-error *ngIf="formStep2.hasError('passwordMismatch')">
+                Las contraseñas no coinciden
+              </mat-error>
+            </mat-form-field>
+
+            <!-- Botones para cambiar de paso o registrar -->
+            <section
+              actions
+              class="w full content-between md:flex gap-x-2 text-sm md:text-base"
+            >
+              <div class="w-full md:w-[50%]">
+                <button
+                  mat-stroked-button
+                  extended="true"
+                  class="!w-full mb-2 md:mb-0"
+                  matStepperPrevious
+                >
+                  Anterior
+                </button>
+              </div>
+              <div class="w-full md:w-[50%]">
+                <button
+                  mat-fab
+                  extended="true"
+                  class="!w-full"
+                  (click)="save()"
+                >
+                  Registrarse
+                </button>
+              </div>
+            </section>
+          </form>
+        </mat-step>
+      </mat-horizontal-stepper>
+
+      <!-- Enlace para usuarios con cuenta -->
+      <div
+        class="text-center d-flex justify-content-center align-items-center text-sm md:text-base"
+      >
+        <span>¿Ya tienes una cuenta? </span>
+        <a
+          routerLink="/auth/login"
+          class="cursor-pointer text-green-700 hover:text-green-400 hover-underline-animation"
+        >
+          Inicia sesión aquí
+        </a>
+      </div>
+    </section>
+  </article>
+</div>

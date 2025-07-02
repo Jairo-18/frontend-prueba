@@ -1,0 +1,66 @@
+<form [formGroup]="form">
+  <div class="flex flex-col md:grid grid-cols-2 gap-2 grow">
+    @for (field of searchFields; track $index) { @if (field.type !==
+    'dateRange') {
+    <mat-form-field appearance="outline">
+      <mat-label>{{ field.label }}</mat-label>
+      @if (field.type === 'text') {
+      <input
+        matInput
+        [placeholder]="field.placeholder || ''"
+        [formControlName]="field.name"
+      />
+      } @if (field.type === 'select') {
+      <mat-select [formControlName]="field.name">
+        @for (option of field.options; track $index) {
+        <mat-option [value]="option.value">
+          {{ option.label }}
+        </mat-option>
+        }
+      </mat-select>
+      } @if (field.type === 'autocomplete') {
+      <input
+        matInput
+        [formControlName]="field.name"
+        [matAutocomplete]="auto"
+        [placeholder]="field.placeholder || ''"
+      />
+      <mat-autocomplete
+        #auto="matAutocomplete"
+        [displayWith]="field.displayWith || null"
+      >
+        @for (option of field.autocompleteOptions; track $index) {
+        <mat-option [value]="option">
+          {{ option.fullName || option.title }}
+        </mat-option>
+        }
+      </mat-autocomplete>
+      }
+
+      <input
+        *ngIf="field.type === 'date'"
+        matInput
+        [matDatepicker]="picker"
+        [formControlName]="field.name"
+        [placeholder]="field.placeholder || ''"
+      />
+      <mat-datepicker-toggle
+        *ngIf="field.type === 'date'"
+        matSuffix
+        [for]="picker"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    } @if (field.type === 'dateRange') {
+    <mat-form-field appearance="outline">
+      <mat-label>{{ field.label }}</mat-label>
+      <mat-date-range-input [rangePicker]="picker">
+        <input matStartDate [formControlName]="field.name + 'Init'" />
+        <input matEndDate [formControlName]="field.name + 'End'" />
+      </mat-date-range-input>
+      <mat-datepicker-toggle matSuffix [for]="picker"> </mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field>
+    } }
+  </div>
+</form>

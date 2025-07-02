@@ -1,0 +1,19 @@
+<article class="base-dialog">
+  <div class="base-dialog-header">
+    <div
+      class="font-noto-serif text-2xl md:text-3xl brand-text-headline-color font-bold"
+    >
+      {{ title() }}
+    </div>
+  </div>
+
+  <div class="base-dialog-content mt-2.5">
+    {{ description() }}
+    <div class="mt-2.5">
+      <ng-content select="[form]"></ng-content>
+    </div>
+  </div>
+  <div class="base-dialog-actions">
+    <ng-content select="[actions]"></ng-content>
+  </div>
+</article>

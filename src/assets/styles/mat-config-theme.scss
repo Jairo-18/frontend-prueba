@@ -1,0 +1,57 @@
+@use '@angular/material' as mat;
+@import 'variables';
+$error-red: #eb2f28;
+
+$dark-primary-text: rgba(black, 0.87);
+$light-primary-text: white;
+
+$brand-palette: (
+  50: $light-green-50,
+  100: $light-green-100,
+  200: $light-green-200,
+  300: $light-green-300,
+  400: $light-green-400,
+  500: $light-green-500,
+  600: $light-green-600,
+  700: $light-green-700,
+  800: $light-green-800,
+  900: $error-red,
+  A100: $light-green-A100,
+  A200: $light-green-A200,
+  A400: $light-green-A400,
+  A700: $light-green-A700,
+  contrast: (
+    50: $dark-primary-text,
+    100: $dark-primary-text,
+    200: $dark-primary-text,
+    300: $light-primary-text,
+    400: $dark-primary-text,
+    500: $light-primary-text,
+    600: $light-primary-text,
+    700: $light-primary-text,
+    800: $light-primary-text,
+    900: $light-primary-text,
+    A100: $dark-primary-text,
+    A200: $light-primary-text,
+    A400: $light-primary-text,
+    A700: $light-primary-text
+  )
+);
+
+$brand-primary: mat.m2-define-palette($brand-palette, 700);
+$brand-accent: mat.m2-define-palette($brand-palette, 300);
+$brand-warn: mat.m2-define-palette($brand-palette, 900);
+
+// Definir el tema basado en colores claros
+$custom-theme: mat.m2-define-light-theme(
+  (
+    color: (
+      primary: $brand-primary,
+      accent: $brand-accent,
+      warn: $brand-warn
+    )
+  )
+);
+
+// Aplicar los estilos de componentes globalmente
+@include mat.all-component-themes($custom-theme);

@@ -1,0 +1,141 @@
+{
+  "root": true,
+  "ignorePatterns": ["projects/**/*"],
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      "parserOptions": {
+        "project": ["tsconfig.json"],
+        "createDefaultProgram": true
+      },
+      "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@angular-eslint/recommended",
+        "plugin:@angular-eslint/template/process-inline-templates",
+        "plugin:prettier/recommended"
+      ],
+      "rules": {
+        "prettier/prettier": 0,
+        "no-unused-vars": "off", // Desactivado para evitar conflicto con @typescript-eslint/no-unused-vars
+        "@angular-eslint/template/click-events-have-key-events": "off",
+        "@typescript-eslint/no-unused-vars": [
+          "error",
+          {
+            "vars": "all", // Aplica a todas las variables
+            "args": "after-used", // Solo reporta argumentos no usados si hay otros que sí se usan
+            "ignoreRestSiblings": false // No ignorar los siblings en la desestructuración
+          }
+        ],
+        "no-empty-function": [
+          "error",
+          {
+            "allow": ["constructors"]
+          }
+        ],
+        "no-unused-expressions": [
+          "error",
+          {
+            "allowShortCircuit": true,
+            "allowTernary": true
+          }
+        ],
+        "camelcase": "off",
+        "@typescript-eslint/naming-convention": [
+          "error",
+          {
+            "selector": "default",
+            "format": ["camelCase"]
+          },
+          {
+            "selector": "variable",
+            "format": ["camelCase", "UPPER_CASE"]
+          },
+          {
+            "selector": "parameter",
+            "format": ["camelCase"],
+            "leadingUnderscore": "allow"
+          },
+          {
+            "selector": "memberLike",
+            "modifiers": ["private"],
+            "format": ["camelCase"],
+            "leadingUnderscore": "require"
+          },
+          {
+            "selector": "typeLike",
+            "format": ["PascalCase"]
+          }
+        ],
+        "@typescript-eslint/semi": ["error", "always"],
+        "curly": ["error", "all"],
+        "@angular-eslint/directive-selector": [
+          "error",
+          {
+            "prefix": "app",
+            "style": "camelCase",
+            "type": "attribute"
+          }
+        ],
+        "@angular-eslint/component-selector": [
+          "error",
+          {
+            "prefix": "app",
+            "style": "kebab-case",
+            "type": "element"
+          }
+        ],
+        "no-restricted-imports": ["error", "rxjs/Rx"],
+        "object-curly-spacing": ["error", "always"],
+        "indent": ["off"],
+        "max-classes-per-file": ["off"],
+        "max-len": ["error", 200],
+        "no-multiple-empty-lines": ["error"],
+        "no-console": [
+          "error",
+          {
+            "allow": ["warn"]
+          }
+        ],
+        "no-empty": ["off"],
+        "no-fallthrough": ["error"],
+        "ordered-imports": ["off"],
+        "quotes": ["error", "single"],
+        "semi": ["error", "always"],
+        "space-before-function-paren": [
+          "error",
+          {
+            "anonymous": "never",
+            "asyncArrow": "always",
+            "named": "never"
+          }
+        ],
+        "comma-dangle": ["error", "never"],
+        "@angular-eslint/no-conflicting-lifecycle": ["error"],
+        "@angular-eslint/no-host-metadata-property": ["error"],
+        "@angular-eslint/no-input-rename": ["error"],
+        "@angular-eslint/no-inputs-metadata-property": ["error"],
+        "@angular-eslint/no-output-native": ["error"],
+        "@angular-eslint/no-output-on-prefix": ["error"],
+        "@angular-eslint/no-output-rename": ["error"],
+        "@angular-eslint/no-outputs-metadata-property": ["error"],
+        "no-trailing-spaces": [
+          "error",
+          {
+            "ignoreComments": true
+          }
+        ]
+      }
+    },
+    {
+      "files": ["*.html"],
+      "extends": [
+        "plugin:@angular-eslint/template/recommended",
+        "plugin:@angular-eslint/template/accessibility"
+      ],
+      "rules": {
+        "@angular-eslint/template/click-events-have-key-events": "off"
+      }
+    }
+  ]
+}

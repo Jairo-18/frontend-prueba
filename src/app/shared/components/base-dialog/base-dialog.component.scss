@@ -1,0 +1,42 @@
+.base-dialog {
+  background-color: #fff;
+  border: solid 1px #06a606;
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.base-dialog-header {
+  border-bottom: 2px solid #06a606;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.base-dialog-content {
+  flex-grow: 1;
+  font-size: 1rem;
+  margin-bottom: 20px;
+  max-height: calc(100vh - 400px) !important;
+  overflow-y: auto;
+}
+
+.base-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+
+  button {
+    padding: 8px 16px;
+    border: none;
+    background-color: #2962dc;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #1e4bbd;
+    }
+  }
+}
