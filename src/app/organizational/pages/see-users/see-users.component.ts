@@ -2,7 +2,13 @@ import { RoleType } from './../../../shared/interfaces/relatedDataGeneral';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { SearchField } from './../../../shared/interfaces/search.interface';
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnInit,
+  ViewChild,
+  ChangeDetectorRef
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { Router, RouterLink } from '@angular/router';
@@ -18,6 +24,7 @@ import {
 } from '@angular/material/paginator';
 import { UserComplete } from '../../interfaces/create.interface';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { PaginationInterface } from '../../../shared/interfaces/pagination.interface';
 import { YesNoDialogComponent } from '../../../shared/components/yes-no-dialog/yes-no-dialog.component';
 import { RelatedDataService } from '../../../shared/services/relatedData.service';
@@ -40,6 +47,7 @@ import { BasePageComponent } from '../../../shared/components/base-page/base-pag
     CommonModule,
     MatPaginatorModule,
     MatTableModule,
+    MatSortModule,
     RouterLink,
     SearchFieldsComponent,
     LoaderComponent,
@@ -57,8 +65,14 @@ export class SeeUsersComponent implements OnInit {
   private readonly _router = inject(Router);
   private readonly _matDialog: MatDialog = inject(MatDialog);
   private readonly _authService: AuthService = inject(AuthService);
+  private readonly _cdr = inject(ChangeDetectorRef);
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) matSort!: MatSort;
   @ViewChild(SearchFieldsComponent) searchComponent!: SearchFieldsComponent;
+
+  // Declarar sort como opcional para manejar mejor su estado
+  sort?: MatSort;
 
   displayedColumns: string[] = [
     'identificationNumber',
@@ -79,6 +93,13 @@ export class SeeUsersComponent implements OnInit {
   isMobile: boolean = false;
   params: any = {};
   selectedTabIndex: number = 0;
+  sortInitialized: boolean = false;
+  order: string = 'ASC';
+  // Propiedades para ordenamiento
+  currentSortColumn = 'createdAt';
+  currentSortDirection: string = 'ASC';
+  isFirstTime: boolean = true;
+
   paginationParams: PaginationInterface = {
     page: 1,
     perPage: 5,
@@ -88,9 +109,6 @@ export class SeeUsersComponent implements OnInit {
     hasNextPage: false
   };
 
-  /**
-   * @param searchFields - Creación del buscador.
-   */
   searchFields: SearchField[] = [
     {
       name: 'search',
@@ -100,30 +118,29 @@ export class SeeUsersComponent implements OnInit {
     }
   ];
 
-  /**
-   * @param ngOnInit - Inicialización de las funciones.
-   */
-  ngOnInit(): void {
-    this.loadUsers();
-    this.getDataForFields();
-  }
-
   constructor() {
     this.isMobile = window.innerWidth <= 768;
     if (this.isMobile) this.paginationParams.perPage = 5;
     this.userLogged = this._authService.getUserLoggedIn();
   }
 
-  /**
-   * @param _getDataForFields - Obtiene los select de roles y tipos de identificación.
-   */
+  ngOnInit(): void {
+    this.loadUsers();
+
+    this.getDataForFields();
+  }
+
+  onTabChange(index: number): void {
+    this.selectedTabIndex = index;
+
+    // Cuando se cambia al tab de resultados (índice 1)
+  }
+
   private getDataForFields(): void {
     this.loading = true;
     this._relatedDataService.createUserRelatedData().subscribe({
       next: (res) => {
         const role = res.data?.roleType || [];
-
-        // Guardar para uso en los métodos getXXXName
         this.roleType = role;
 
         const roleOption = this.searchFields.find(
@@ -141,6 +158,7 @@ export class SeeUsersComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error cargando datos relacionados', err);
+        this.loading = false;
       }
     });
   }
@@ -149,29 +167,16 @@ export class SeeUsersComponent implements OnInit {
     return this.roleType.find((r) => r.roleTypeId === id)?.name || '';
   }
 
-  /**
-   * @param onSearchSubmit - Botón de búsqueda.
-   */
   onSearchSubmit(values: any): void {
     this.params = values;
     this.paginationParams.page = 1;
     this.loadUsers();
   }
 
-  /**
-   * @param onChangePagination - Cambio de paginación.
-   */
   onChangePagination(event: PageEvent): void {
     this.paginationParams.page = event.pageIndex + 1;
     this.paginationParams.perPage = event.pageSize;
     this.loadUsers();
-  }
-
-  /**
-   * @param onTabChange - Cambio de tabla.
-   */
-  onTabChange(index: number): void {
-    this.selectedTabIndex = index;
   }
 
   onSearchChange(form: any): void {
@@ -180,24 +185,24 @@ export class SeeUsersComponent implements OnInit {
     this.loadUsers();
   }
 
-  /**
-   * @param goToCreateUser - Ir a crear usuarios
-   */
   goToCreateUser(): void {
     this._router.navigate(['/users/create']);
   }
 
-  /**
-   * @param loadUsers - Carga de usuarios.
-   * @param getUserWithPagination - Obtiene los usuarios con paginación.
-   */
+  sortData(sort: Sort) {
+    this.currentSortColumn = sort.active;
+    this.currentSortDirection = sort.direction.toUpperCase();
+    this.loadUsers();
+  }
+
   loadUsers(filter: string = ''): void {
-    this.loading = true;
     const query = {
       page: this.paginationParams.page,
       perPage: this.paginationParams.perPage,
       search: filter,
-      ...this.params
+      ...this.params,
+      order: this.currentSortDirection,
+      orderBy: this.currentSortColumn
     };
 
     this._usersService.getUserWithPagination(query).subscribe({
@@ -205,17 +210,16 @@ export class SeeUsersComponent implements OnInit {
         this.dataSource.data = res.data || [];
         this.paginationParams = res?.pagination;
         this.loading = false;
+        this.isFirstTime = false;
       },
       error: (error) => {
         console.error('Error en la solicitud:', error);
         this.loading = false;
+        this.isFirstTime = false;
       }
     });
   }
 
-  /**
-   * @param _deleteUser - Ellimina un usuario.
-   */
   private deleteUser(userId: string): void {
     this.loading = true;
     this._usersService.deleteUserPanel(userId).subscribe({
@@ -230,9 +234,6 @@ export class SeeUsersComponent implements OnInit {
     });
   }
 
-  /**
-   * @param openDeleteUserDialog - Abre un modal para eliminar un usuario.
-   */
   openDeleteUserDialog(id: string): void {
     const dialogRef = this._matDialog.open(YesNoDialogComponent, {
       data: {
@@ -248,29 +249,6 @@ export class SeeUsersComponent implements OnInit {
     });
   }
 
-  validateIfCanEditUserOrDelete(user: UserComplete): boolean {
-    const loggedInRoleName = this.userLogged?.roleType?.name;
-    const userToActOnRoleName = user.roleType?.name;
-    const isCurrentUser = this.userLogged?.userId === user.userId;
-
-    // Un administrador puede editar/eliminar a cualquiera, excepto a sí mismo (para eliminar)
-    if (loggedInRoleName === 'Administrador') {
-      // Un administrador puede editar a sí mismo, pero no eliminar
-      return isCurrentUser; // Si es el mismo usuario, NO permitir eliminación (o edición si fuera el caso)
-    }
-
-    // Un empleado solo puede editar/eliminar usuarios con rol 'Usuario' y no a sí mismo.
-    if (loggedInRoleName === 'Empleado') {
-      return (
-        userToActOnRoleName !== 'Usuario' || // No permitir si no es un usuario "regular"
-        isCurrentUser // No permitir si es el mismo usuario
-      );
-    }
-
-    // Por defecto, no se permite ninguna acción si no cumple las condiciones anteriores
-    return true;
-  }
-
   canEditUser(user: UserComplete): boolean {
     const loggedInRoleName = this.userLogged?.roleType?.name;
     const userToActOnRoleName = user.roleType?.name;
@@ -279,9 +257,7 @@ export class SeeUsersComponent implements OnInit {
     // El admin puede editar a cualquier usuario
     if (loggedInRoleName === 'Administrador') return true;
 
-    // El empleado solo puede:
-    // - editar usuarios con rol Usuario
-    // - o editarse a sí mismo
+    // El empleado solo puede editar usuarios con rol Usuario o editarse a sí mismo
     if (loggedInRoleName === 'Empleado') {
       return userToActOnRoleName === 'Usuario' || isCurrentUser;
     }
@@ -300,11 +276,16 @@ export class SeeUsersComponent implements OnInit {
     // El admin puede eliminar a cualquiera excepto a sí mismo
     if (loggedInRoleName === 'Administrador') return true;
 
-    // El empleado solo puede eliminar usuarios con rol Usuario (no a sí mismo)
+    // El empleado solo puede eliminar usuarios con rol Usuario
     if (loggedInRoleName === 'Empleado') {
       return userToActOnRoleName === 'Usuario';
     }
 
     return false;
+  }
+
+  // Método simplificado para validar permisos (mantiene compatibilidad con el template)
+  validateIfCanEditUserOrDelete(user: UserComplete): boolean {
+    return this.canEditUser(user) || this.canDeleteUser(user);
   }
 }

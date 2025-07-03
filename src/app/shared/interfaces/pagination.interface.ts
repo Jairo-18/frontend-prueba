@@ -8,7 +8,8 @@ export interface PaginationInterface {
 }
 
 export interface ParamsPaginationInterface {
-  order?: 'ASC' | 'DESC';
+  order?: '' | 'DESC' | 'ASC';
+  orderBy?: string;
   page?: number;
   perPage?: number;
   search?: string;
